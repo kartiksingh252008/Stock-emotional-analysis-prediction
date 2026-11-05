@@ -1,3 +1,4 @@
+
 package com.example;
 
 import com.opencsv.CSVReader;
@@ -12,7 +13,7 @@ public class Main {
 
         String[] row;
 
-        reader.readNext(); // Skip header remeber
+        reader.readNext(); // Skip header imp
 
         while ((row = reader.readNext()) != null) {
 
@@ -42,29 +43,32 @@ public class Main {
             System.out.println("Last Sentiment: " + lastSentiment);
             System.out.println("Price: " + price);
             System.out.println("Trading Volume: " + volume);
-            System.out.println("Trading Volume: " + previousVolume);
+            System.out.println("Previous Volume: " + previousVolume);
+
             double score = (0.7 * lastSentiment)
                     + (0.3 * sentimentChange);
-            boolean trending ;
-            if(((previousVolume - volume)/previousVolume)*100 > 0){
-                trending = true ;
-            }
-            else {
-                trending = false ;
-            }
 
-            String prediction;
-            if (score > 5) {
-                prediction = "BULLISH &&" + " trending = " + trending;
-            } else if (score < -5 ) {
-                prediction = "BEARISH &&" + " trending = " + trending;
-            } else {
-                prediction = "NEUTRAL && trending = " + trending;
-            }
             System.out.println("Combined Score: " + score);
-            System.out.println("Prediction: " + prediction);
 
-            System.out.println("Sentiment Signal: " + prediction);
+            double volumeChange = 0;
+
+            if (previousVolume > 0) {
+                volumeChange = ((double) (volume - previousVolume)
+                        / previousVolume) * 100;
+            }
+
+            System.out.println("Volume Change: " + volumeChange + "%");
+
+            boolean trending;
+
+            if (volumeChange > 20) {
+                trending = true;
+            } else {
+                trending = false;
+            }
+
+            System.out.println("Trending: " + trending);
+
             String priceSignal;
 
             if (changePercent > 0) {
@@ -76,10 +80,44 @@ public class Main {
             }
 
             System.out.println("Price Movement: " + priceSignal);
+
+            // 4. Combined prediction algorithm
+            int finalScore = 0;
+
+            if (score > 5) {
+                finalScore += 2;
+            } else if (score < -5) {
+                finalScore -= 2;
+            }
+
+            if (volumeChange > 20) {
+                finalScore += 1;
+            } else if (volumeChange < -20) {
+                finalScore -= 1;
+            }
+
+            if (changePercent > 0) {
+                finalScore += 1;
+            } else if (changePercent < 0) {
+                finalScore -= 1;
+            }
+
+            String finalPrediction;
+
+            if (finalScore >= 2) {
+                finalPrediction = "BULLISH";
+            } else if (finalScore <= -2) {
+                finalPrediction = "BEARISH";
+            } else {
+                finalPrediction = "NEUTRAL";
+            }
+
+            System.out.println("Final Score: " + finalScore);
+            System.out.println("Final Prediction: " + finalPrediction);
+
             System.out.println("-------------------------");
         }
 
         reader.close();
-
     }
 }

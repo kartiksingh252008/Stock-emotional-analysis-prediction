@@ -23,6 +23,68 @@ public class Stock {
         this.companyName = companyName;
     }
 
+    public double getSentimentChange() {
+        return sentimentChange;
+    }
+
+
+
+    public double getLastSentiment() {
+        return lastSentiment;
+    }
+
+    public void setLastSentiment(double lastSentiment) {
+        this.lastSentiment = lastSentiment;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+
+
+    public double getChangePercent() {
+        return changePercent;
+    }
+
+
+
+    public long getVolume() {
+        return volume;
+    }
+
+
+    public long getPreviousVolume() {
+        return previousVolume;
+    }
+
+
+
+    public double getSentimentScore() {
+        return sentimentScore;
+    }
+
+
+
+    public double getVolumeChange() {
+        return volumeChange;
+    }
+
+
+    public int getFinalScore() {
+        return finalScore;
+    }
+
+
+
+    public String getPrediction() {
+        return prediction;
+    }
+
+    public void setPrediction(String prediction) {
+        this.prediction = prediction;
+    }
+
     private String ticker;
     private String companyName;
 
